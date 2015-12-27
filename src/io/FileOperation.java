@@ -22,13 +22,11 @@ public class FileOperation {
 			String currentLine;
 
 			try {
+				int row = 0;
 				while ((currentLine = br.readLine()) != null) {
-					int row = 0;
-					System.out.println(currentLine);
 					String[] chars = currentLine.split(" ");
 					for (int col = 0; col < 9; col++) {
 						grid[row][col] = chars[col].charAt(0);
-						System.out.println(chars[col].charAt(0));
 					}
 					row++;
 				}

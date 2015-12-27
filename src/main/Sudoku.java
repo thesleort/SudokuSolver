@@ -16,6 +16,5 @@ public class Sudoku {
 			}
 			System.out.println();
 		}
-		System.out.print(grid[8][1] + " ");
 	}
 }
