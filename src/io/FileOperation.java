@@ -11,9 +11,9 @@ import java.io.InputStreamReader;
 import main.Table;
 
 public class FileOperation {
-	char[][] grid = new Table().grid;
+	int[][] grid = new Table().grid;
 
-	public char[][] FileReader(File fileName) {
+	public int[][] FileReader(File fileName) {
 		try {
 			FileInputStream finput = new FileInputStream(fileName);
 			DataInputStream dinput = new DataInputStream(finput);
@@ -26,7 +26,10 @@ public class FileOperation {
 				while ((currentLine = br.readLine()) != null) {
 					String[] chars = currentLine.split(" ");
 					for (int col = 0; col < 9; col++) {
-						grid[row][col] = chars[col].charAt(0);
+						if (chars[col].charAt(0) != 'X') {
+							int x = Character.getNumericValue(chars[col].charAt(0));
+							grid[row][col] = x;
+						}
 					}
 					row++;
 				}
