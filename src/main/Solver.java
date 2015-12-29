@@ -6,9 +6,11 @@ import java.util.ArrayList;
 public class Solver {
 	public boolean solver(int grid[][], int row, int col) throws IOException {
 		Table table = new Table();
-		System.out.println("---------------------------------------------------");
-		table.printGrid(grid);
 		/*
+		 * System.out.println(
+		 * "---------------------------------------------------");
+		 * table.printGrid(table.grid);
+		 * 
 		 * System.out.println("row "+ row); System.out.println("col "+ col);
 		 * System.out.println("num " + grid[row][col]);
 		 */
@@ -19,6 +21,8 @@ public class Solver {
 				// System.out.println(row + " " + col);
 				if (col > 8 && row > 8) {
 					table.printGrid(grid);
+					System.out.println(
+							"DONE ==================================================================================");
 					return true;
 				}
 				row = 0;
@@ -34,21 +38,27 @@ public class Solver {
 				System.out.println(currentNumbers);
 				System.out.println(grid[row][col]);
 				grid[row][col] = i;
-				System.out.println("INPUT:" + grid[row][col] + " on: " + row + "," + col);
 				System.out.println("---------------------------------------------------");
+				System.out.println("INPUT:" + grid[row][col] + " on: " + (row + 1) + "," + (col + 1));
 				table.printGrid(grid);
-				new Solver().solver(grid, row, col);
-				Runtime.getRuntime().exec("clear");
+				// boolean rec = solver(grid, row, col);
+				if (solver(grid, row, col) == true) {
+					System.out.println(
+							"DONE ---------------------------------------------------------------------------------------------");
+					break;
+				}
+				if (solver(grid, row, col) == false) {
+					System.out.println("NOPE");
+					
+				}
 			}
 			i++;
 		}
-
 		/*
 		 * System.out.println(
 		 * "---------------------------------------------------"); Table table =
 		 * new Table(); table.printGrid(grid);
 		 */
-		System.out.println("Wrong");
 		return false;
 	}
 
