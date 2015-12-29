@@ -2,7 +2,6 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
-
 import io.FileOperation;
 
 public class Sudoku {

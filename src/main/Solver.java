@@ -22,8 +22,6 @@ public class Solver {
 				// System.out.println(row + " " + col);
 				if (col > 8 && row > 8) {
 					table.printGrid(grid);
-					System.out.println(
-							"DONE ==================================================================================");
 					return true;
 				}
 				row = 0;
