@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Solver {
 	public boolean solver(int grid[][], int row, int col) throws IOException {
 		Table table = new Table();
+		// System.out.println(row + "," + col);
 		/*
 		 * System.out.println(
 		 * "---------------------------------------------------");
@@ -26,39 +27,32 @@ public class Solver {
 					return true;
 				}
 				row = 0;
-
 			}
 		}
-		ArrayList<Integer> currentNumbers = new Solver().contains(grid, row, col);
-
+		ArrayList<Integer> currentNumbers = contains(grid, row, col);
 		// System.out.println(currentNumbers);
 		int i = 1;
 		while (i <= 9) {
 			if (currentNumbers.contains(i) == false) {
+/*				System.out.println("---------------------------------------------------");
+				System.out.println("This is i " + i);
 				System.out.println(currentNumbers);
-				System.out.println(grid[row][col]);
+				System.out.println(grid[row][col]);*/
 				grid[row][col] = i;
-				System.out.println("---------------------------------------------------");
-				System.out.println("INPUT:" + grid[row][col] + " on: " + (row + 1) + "," + (col + 1));
-				table.printGrid(grid);
-				// boolean rec = solver(grid, row, col);
-				if (solver(grid, row, col) == true) {
-					System.out.println(
-							"DONE ---------------------------------------------------------------------------------------------");
-					break;
-				}
-				if (solver(grid, row, col) == false) {
-					System.out.println("NOPE");
-					
+				//System.out.println("INPUT:" + grid[row][col] + " on: " + (row + 1) + "," + (col + 1));
+				boolean rec = solver(grid, row, col);
+				if (rec == true) {
+					return true;
+				} else {
+					grid[row][col] = 0;
+					currentNumbers = contains(grid, row, col);
+/*					System.out.println(currentNumbers);
+					System.out.println("NOPE");*/
+
 				}
 			}
 			i++;
 		}
-		/*
-		 * System.out.println(
-		 * "---------------------------------------------------"); Table table =
-		 * new Table(); table.printGrid(grid);
-		 */
 		return false;
 	}
 

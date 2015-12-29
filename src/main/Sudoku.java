@@ -13,8 +13,6 @@ public class Sudoku {
 		File filename = new File(args[0]);
 		FileOperation fileop = new FileOperation();
 		int[][] grid = fileop.FileReader(filename);
-		Table table = new Table();
-		table.printGrid(grid);
 		Solver solver = new Solver();
 		solver.solver(grid, row, col);
 	}
