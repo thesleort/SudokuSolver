@@ -8,16 +8,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import main.Sudoku;
 import main.Table;
 
 public class FileOperation {
-	int grid[][] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 	public int[][] FileReader(File fileName) {
+		Table table = new Table();
 		try {
 			FileInputStream finput = new FileInputStream(fileName);
 			DataInputStream dinput = new DataInputStream(finput);
@@ -32,7 +27,7 @@ public class FileOperation {
 					for (int col = 0; col < 9; col++) {
 						if (chars[col].charAt(0) != 'X') {
 							int x = Character.getNumericValue(chars[col].charAt(0));
-							grid[row][col] = x;
+							table.grid[row][col] = x;
 						}
 					}
 					row++;
@@ -45,7 +40,7 @@ public class FileOperation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return grid;
+		return table.grid;
 
 	}
 }

@@ -1,11 +1,19 @@
 package main;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Solver {
-	public boolean solver(int grid[][], int row, int col) throws IOException {
+	public boolean solver(int grid[][], int row, int col) {
+
+		if (Sudoku.isSolved == true) {
+			return false;
+		}
+
+		/*System.out.println(ThreadInit.threads);*/
 		Table table = new Table();
+		/*
+		 * Table table = new Table(); table.printGrid(grid);
+		 */
 		// System.out.println(row + "," + col);
 		/*
 		 * System.out.println(
@@ -22,6 +30,14 @@ public class Solver {
 				// System.out.println(row + " " + col);
 				if (col > 8 && row > 8) {
 					table.printGrid(grid);
+
+					Sudoku.finalGrid = grid;
+					System.out.println("SOLVED");
+					table.printGrid(Sudoku.finalGrid);
+					Sudoku.isSolved = true;
+/*					for (Thread t : ThreadInit.threads) {
+						t.interrupt();
+					}*/
 					return true;
 				}
 				row = 0;
@@ -32,20 +48,26 @@ public class Solver {
 		int i = 1;
 		while (i <= 9) {
 			if (currentNumbers.contains(i) == false) {
-/*				System.out.println("---------------------------------------------------");
-				System.out.println("This is i " + i);
-				System.out.println(currentNumbers);
-				System.out.println(grid[row][col]);*/
+				/*
+				 * System.out.println(
+				 * "---------------------------------------------------");
+				 * System.out.println("This is i " + i);
+				 * System.out.println(currentNumbers);
+				 * System.out.println(grid[row][col]);
+				 */
 				grid[row][col] = i;
-				//System.out.println("INPUT:" + grid[row][col] + " on: " + (row + 1) + "," + (col + 1));
+				// System.out.println("INPUT:" + grid[row][col] + " on: " + (row
+				// + 1) + "," + (col + 1));
 				boolean rec = solver(grid, row, col);
 				if (rec == true) {
 					return true;
 				} else {
 					grid[row][col] = 0;
 					currentNumbers = contains(grid, row, col);
-/*					System.out.println(currentNumbers);
-					System.out.println("NOPE");*/
+					/*
+					 * System.out.println(currentNumbers);
+					 * System.out.println("NOPE");
+					 */
 
 				}
 			}
