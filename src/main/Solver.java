@@ -11,6 +11,7 @@ public class Solver {
 
 		/*System.out.println(ThreadInit.threads);*/
 		Table table = new Table();
+
 		/*
 		 * Table table = new Table(); table.printGrid(grid);
 		 */
@@ -27,14 +28,14 @@ public class Solver {
 			row++;
 			if (row > 8) {
 				col++;
-				// System.out.println(row + " " + col);
+				//System.out.println(row + " " + col);
 				if (col > 8 && row > 8) {
-					table.printGrid(grid);
 
 					Sudoku.finalGrid = grid;
+//					table.printGrid(grid);
 					System.out.println("SOLVED");
-					table.printGrid(Sudoku.finalGrid);
-					Sudoku.isSolved = true;
+
+//					Sudoku.isSolved = true;
 /*					for (Thread t : ThreadInit.threads) {
 						t.interrupt();
 					}*/
@@ -58,6 +59,7 @@ public class Solver {
 				grid[row][col] = i;
 				// System.out.println("INPUT:" + grid[row][col] + " on: " + (row
 				// + 1) + "," + (col + 1));
+//				table.printGrid(grid);
 				boolean rec = solver(grid, row, col);
 				if (rec == true) {
 					return true;
