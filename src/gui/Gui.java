@@ -26,7 +26,9 @@ public class Gui extends JPanel implements ActionListener {
 	JButton btnFileSelector, btnSave, btnStart;
 	FileSelector fileSelector = new FileSelector();
 	int[][] sudokuTable;
-	JPanel[][] panelHolder;
+	int rows = 9;
+	int cols = 9;
+	JPanel[][] panelHolder = new JPanel[rows][cols];
 	JPanel[] superPanel = new JPanel[2];
 
 	/**
@@ -59,6 +61,29 @@ public class Gui extends JPanel implements ActionListener {
 			fileSelector.FileSelect();
 			try {
 				Sudoku.inputGrid = fileop.FileReader(FileSelector.chosenFile);
+				superPanel[1].setLayout(new GridLayout(rows, cols));
+				for (int m = 0; m < rows; m++) {
+
+					for (int n = 0; n < cols; n++) {
+						
+						
+						JLabel label = new JLabel(String.valueOf(Sudoku.inputGrid[m][n]));
+						panelHolder[m][n] = new JPanel();
+
+						panelHolder[m][n].setSize(10, 10);
+						superPanel[1].add(panelHolder[m][n]);
+						panelHolder[m][n].add(label);
+						if (n % 3 == 2 && m % 3 == 2) {
+							panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 3, 3, Color.BLACK));
+						} else if (n % 3 == 2) {
+							panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 3, Color.BLACK));
+						} else if (m % 3 == 2) {
+							panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 3, 1, Color.BLACK));
+						} else {
+							panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+						}
+					}
+				}
 			} catch (NullPointerException e1) {
 				System.out.println("No file was chosen");
 			}
@@ -77,13 +102,12 @@ public class Gui extends JPanel implements ActionListener {
 			}
 		} else if (e.getSource() == btnStart) {
 			try {
-				new Table().printGrid(Sudoku.inputGrid);
 				if (Sudoku.inputGrid == null) {
 					throw new NullPointerException();
 				}
+				new Table().printGrid(Sudoku.inputGrid);
 				long tStart = System.nanoTime();
-				int rows = 9;
-				int cols = 9;
+				
 				int row = 0;
 				int col = 0;
 				Thread t = new Thread(new Runnable() {
@@ -108,7 +132,12 @@ public class Gui extends JPanel implements ActionListener {
 
 					}
 				}
-				//panelHolder = new JPanel[rows][cols];
+				if(superPanel[1] != null) {
+					superPanel[1].removeAll();
+					superPanel[1].revalidate();
+					superPanel[1].repaint();
+				}
+				new Table().printGrid(Sudoku.finalGrid);
 				superPanel[1].setLayout(new GridLayout(rows, cols));
 				for (int m = 0; m < rows; m++) {
 
@@ -116,12 +145,10 @@ public class Gui extends JPanel implements ActionListener {
 						
 						
 						JLabel label = new JLabel(String.valueOf(Sudoku.finalGrid[m][n]));
-						if(panelHolder[m][n] != null) {
-							panelHolder[m][n].removeAll();
-						}
+						
 						panelHolder[m][n] = new JPanel();
 						panelHolder[m][n].setSize(10, 10);
-						add(panelHolder[m][n]);
+						superPanel[1].add(panelHolder[m][n]);
 						panelHolder[m][n].add(label);
 						if (n % 3 == 2 && m % 3 == 2) {
 							panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 3, 3, Color.BLACK));
@@ -138,7 +165,7 @@ public class Gui extends JPanel implements ActionListener {
 				new Table().printGrid(Sudoku.finalGrid);
 				System.out.println(elapsedSeconds);
 			} catch (NullPointerException e2) {
-				new Table().printGrid(Sudoku.finalGrid);
+				System.out.println(e2.getMessage());
 				System.out.println("There was no sudoku to solve");
 				JOptionPane.showMessageDialog(this, "There was no sudoku to solve", "Inane error",
 						JOptionPane.ERROR_MESSAGE);

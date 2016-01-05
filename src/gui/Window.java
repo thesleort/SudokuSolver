@@ -11,7 +11,7 @@ public class Window extends JFrame {
 		window.add(new Gui());
 		window.pack();
 		window.setVisible(true);
-		window.setSize(500, 300);
+		window.setSize(500, 320);
 		//window.setResizable(false);
 	}
 }
