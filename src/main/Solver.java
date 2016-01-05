@@ -10,7 +10,7 @@ public class Solver {
 		}
 
 		/*System.out.println(ThreadInit.threads);*/
-		Table table = new Table();
+		//Table table = new Table();
 
 		/*
 		 * Table table = new Table(); table.printGrid(grid);
@@ -34,7 +34,7 @@ public class Solver {
 					Sudoku.finalGrid = grid;
 //					table.printGrid(grid);
 					System.out.println("SOLVED");
-
+					
 //					Sudoku.isSolved = true;
 /*					for (Thread t : ThreadInit.threads) {
 						t.interrupt();
