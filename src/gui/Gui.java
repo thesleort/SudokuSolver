@@ -10,8 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.io.File;
-import java.io.FileNotFoundException;
-
 import io.FileOperation;
 import main.Solver;
 import main.Sudoku;
@@ -29,7 +27,7 @@ public class Gui extends JPanel implements ActionListener {
 	int rows = 9;
 	int cols = 9;
 	JPanel[][] panelHolder = new JPanel[rows][cols];
-	JPanel[] superPanel = new JPanel[2];
+	JPanel[] superPanel = new JPanel[3];
 
 	/**
 	 * Create the panel.
@@ -39,6 +37,7 @@ public class Gui extends JPanel implements ActionListener {
 		this.btnFileSelector = new JButton("Select File");
 		superPanel[0] = new JPanel();
 		superPanel[1] = new JPanel();
+		superPanel[2] = new JPanel();
 		btnFileSelector.addActionListener(this);
 		superPanel[0].add(btnFileSelector);
 		this.btnStart = new JButton("Start solving");
@@ -49,6 +48,7 @@ public class Gui extends JPanel implements ActionListener {
 		superPanel[0].add(btnSave);
 		add(superPanel[0]);
 		add(superPanel[1]);
+		add(superPanel[2]);
 
 	}
 
@@ -60,13 +60,23 @@ public class Gui extends JPanel implements ActionListener {
 
 			fileSelector.FileSelect();
 			try {
+				if (superPanel[1] != null && superPanel[2] != null) {
+					superPanel[1].removeAll();
+					superPanel[1].revalidate();
+					superPanel[1].repaint();
+					superPanel[2].removeAll();
+					superPanel[2].revalidate();
+					superPanel[2].repaint();
+				}
+				JLabel feedback = new JLabel(
+						"<html>The sudoku: " + FileSelector.chosenFile + "<br> has been loaded</html>");
+				superPanel[2].add(feedback);
 				Sudoku.inputGrid = fileop.FileReader(FileSelector.chosenFile);
 				superPanel[1].setLayout(new GridLayout(rows, cols));
 				for (int m = 0; m < rows; m++) {
 
 					for (int n = 0; n < cols; n++) {
-						
-						
+
 						JLabel label = new JLabel(String.valueOf(Sudoku.inputGrid[m][n]));
 						panelHolder[m][n] = new JPanel();
 
@@ -107,7 +117,7 @@ public class Gui extends JPanel implements ActionListener {
 				}
 				new Table().printGrid(Sudoku.inputGrid);
 				long tStart = System.nanoTime();
-				
+
 				int row = 0;
 				int col = 0;
 				Thread t = new Thread(new Runnable() {
@@ -132,38 +142,46 @@ public class Gui extends JPanel implements ActionListener {
 
 					}
 				}
-				if(superPanel[1] != null) {
-					superPanel[1].removeAll();
-					superPanel[1].revalidate();
-					superPanel[1].repaint();
-				}
-				new Table().printGrid(Sudoku.finalGrid);
-				superPanel[1].setLayout(new GridLayout(rows, cols));
-				for (int m = 0; m < rows; m++) {
+				if (Sudoku.solvable == false) {
+					JOptionPane.showMessageDialog(this, "The sudoku could not be solved", "Inane error",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					if (superPanel[1] != null && superPanel[2] != null) {
+						superPanel[1].removeAll();
+						superPanel[1].revalidate();
+						superPanel[1].repaint();
+						superPanel[2].removeAll();
+						superPanel[2].revalidate();
+						superPanel[2].repaint();
+					}
+					JLabel feedback = new JLabel("<html>The sudoku has been solved. You can now save it.</html>");
+					superPanel[2].add(feedback);
+					new Table().printGrid(Sudoku.finalGrid);
+					superPanel[1].setLayout(new GridLayout(rows, cols));
+					for (int m = 0; m < rows; m++) {
 
-					for (int n = 0; n < cols; n++) {
-						
-						
-						JLabel label = new JLabel(String.valueOf(Sudoku.finalGrid[m][n]));
-						
-						panelHolder[m][n] = new JPanel();
-						panelHolder[m][n].setSize(10, 10);
-						superPanel[1].add(panelHolder[m][n]);
-						panelHolder[m][n].add(label);
-						if (n % 3 == 2 && m % 3 == 2) {
-							panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 3, 3, Color.BLACK));
-						} else if (n % 3 == 2) {
-							panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 3, Color.BLACK));
-						} else if (m % 3 == 2) {
-							panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 3, 1, Color.BLACK));
-						} else {
-							panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+						for (int n = 0; n < cols; n++) {
+
+							JLabel label = new JLabel(String.valueOf(Sudoku.finalGrid[m][n]));
+
+							panelHolder[m][n] = new JPanel();
+							panelHolder[m][n].setSize(10, 10);
+							superPanel[1].add(panelHolder[m][n]);
+							panelHolder[m][n].add(label);
+							if (n % 3 == 2 && m % 3 == 2) {
+								panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 3, 3, Color.BLACK));
+							} else if (n % 3 == 2) {
+								panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 3, Color.BLACK));
+							} else if (m % 3 == 2) {
+								panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 3, 1, Color.BLACK));
+							} else {
+								panelHolder[m][n].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+							}
 						}
 					}
+					new Table().printGrid(Sudoku.finalGrid);
+					System.out.println(elapsedSeconds);
 				}
-
-				new Table().printGrid(Sudoku.finalGrid);
-				System.out.println(elapsedSeconds);
 			} catch (NullPointerException e2) {
 				System.out.println(e2.getMessage());
 				System.out.println("There was no sudoku to solve");

@@ -8,7 +8,7 @@ public class Solver {
 		if (Sudoku.isSolved == true) {
 			return false;
 		}
-
+		Sudoku.solvable = false;
 		/*System.out.println(ThreadInit.threads);*/
 		//Table table = new Table();
 
@@ -34,7 +34,7 @@ public class Solver {
 					Sudoku.finalGrid = grid;
 //					table.printGrid(grid);
 					System.out.println("SOLVED");
-					
+					Sudoku.solvable = true;
 //					Sudoku.isSolved = true;
 /*					for (Thread t : ThreadInit.threads) {
 						t.interrupt();

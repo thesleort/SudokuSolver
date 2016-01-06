@@ -12,6 +12,7 @@ public class Sudoku {
 	public static int finalGrid[][];
 	public static final Object sync = new Object();
 	public static int inputGrid[][];
+	public static boolean solvable;
 	public static void main(String[] args) throws IOException {
 		int row = 0;
 		int col = 0;
