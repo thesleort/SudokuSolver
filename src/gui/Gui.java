@@ -14,38 +14,36 @@ import io.FileOperation;
 import main.Solver;
 import main.Sudoku;
 import main.Table;
+//import main.ThreadInit; // For multi-threading
 
 public class Gui extends JPanel implements ActionListener {
-	/**
-	 * 
-	 */
 
 	private static final long serialVersionUID = 1L;
 	JButton btnFileSelector, btnSave, btnStart;
 	FileSelector fileSelector = new FileSelector();
-	int[][] sudokuTable;
 	int rows = 9;
 	int cols = 9;
 	JPanel[][] panelHolder = new JPanel[rows][cols];
 	JPanel[] superPanel = new JPanel[3];
 
-	/**
-	 * Create the panel.
-	 */
-
 	public Gui() {
+		// Defining the buttons
 		this.btnFileSelector = new JButton("Select File");
+		this.btnStart = new JButton("Start solving");
+		this.btnSave = new JButton("Save sudoku");
+		// Defining the superPanels
 		superPanel[0] = new JPanel();
 		superPanel[1] = new JPanel();
 		superPanel[2] = new JPanel();
+		// Adding functionality to the buttons
 		btnFileSelector.addActionListener(this);
-		superPanel[0].add(btnFileSelector);
-		this.btnStart = new JButton("Start solving");
 		btnStart.addActionListener(this);
-		superPanel[0].add(btnStart);
-		this.btnSave = new JButton("Save sudoku");
 		btnSave.addActionListener(this);
+		// Adding the buttons to superPanel[0]
+		superPanel[0].add(btnFileSelector);
+		superPanel[0].add(btnStart);
 		superPanel[0].add(btnSave);
+		// Adding the superPanels to the Gui JPanel.
 		add(superPanel[0]);
 		add(superPanel[1]);
 		add(superPanel[2]);
@@ -57,7 +55,6 @@ public class Gui extends JPanel implements ActionListener {
 		FileOperation fileop = new FileOperation();
 		if (e.getSource() == btnFileSelector) {
 			System.out.println("Waiting for file select");
-
 			fileSelector.FileSelect();
 			try {
 				if (superPanel[1] != null && superPanel[2] != null) {
@@ -74,12 +71,9 @@ public class Gui extends JPanel implements ActionListener {
 				Sudoku.inputGrid = fileop.FileReader(FileSelector.chosenFile);
 				superPanel[1].setLayout(new GridLayout(rows, cols));
 				for (int m = 0; m < rows; m++) {
-
 					for (int n = 0; n < cols; n++) {
-
 						JLabel label = new JLabel(String.valueOf(Sudoku.inputGrid[m][n]));
 						panelHolder[m][n] = new JPanel();
-
 						panelHolder[m][n].setSize(10, 10);
 						superPanel[1].add(panelHolder[m][n]);
 						panelHolder[m][n].add(label);
@@ -96,54 +90,49 @@ public class Gui extends JPanel implements ActionListener {
 				}
 			} catch (NullPointerException e1) {
 				System.out.println("No file was chosen");
+				JOptionPane.showMessageDialog(this, "No file was chosen", "No file",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (e.getSource() == btnSave) {
-
-			try {
-				if (Sudoku.inputGrid == null) {
-					JOptionPane.showMessageDialog(this, "There is no file to save", "Inane error",
-							JOptionPane.ERROR_MESSAGE);
-				} else {
-					File path = fileSelector.FileSave();
-					fileop.FileWriteSudoku(Sudoku.finalGrid, path);
-				}
-			} catch (NullPointerException e1) {
-				// TODO: handle exception
+			if (Sudoku.inputGrid == null) {
+				JOptionPane.showMessageDialog(this, "There is no file to save", "No file",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				File path = fileSelector.FileSave();
+				fileop.FileWriteSudoku(Sudoku.finalGrid, path);
 			}
 		} else if (e.getSource() == btnStart) {
 			try {
 				if (Sudoku.inputGrid == null) {
 					throw new NullPointerException();
 				}
-				new Table().printGrid(Sudoku.inputGrid);
-				long tStart = System.nanoTime();
-
+				new Table().printGrid(Sudoku.inputGrid); // Print the unsolved sudoku in the console/terminal
 				int row = 0;
 				int col = 0;
 				Thread t = new Thread(new Runnable() {
 					public void run() {
-						new Solver().solver(Sudoku.inputGrid, row, col);
+						Sudoku.isSolved = false;
+						new Solver().solve(Sudoku.inputGrid, row, col);
+//						new ThreadInit(grid, row, col); // Multi-threading initialiser
 						synchronized (Sudoku.sync) {
 							System.out.println("notifying");
 							Sudoku.sync.notify();
 							System.out.println("done");
 						}
-
 					}
 				});
 				t.start();
-				long tEnd = System.nanoTime();
-				long tDelta = tEnd - tStart;
-				double elapsedSeconds = tDelta / 10000;
 				synchronized (Sudoku.sync) {
 					try {
 						Sudoku.sync.wait();
 					} catch (InterruptedException f) {
-
+						JOptionPane.showMessageDialog(this,
+								"Something happened to the sudoku solving thread and thus could not complete the task",
+								"Warning", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				if (Sudoku.solvable == false) {
-					JOptionPane.showMessageDialog(this, "The sudoku could not be solved", "Inane error",
+					JOptionPane.showMessageDialog(this, "The sudoku could not be solved", "Sudoku unsolvable",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					if (superPanel[1] != null && superPanel[2] != null) {
@@ -159,11 +148,8 @@ public class Gui extends JPanel implements ActionListener {
 					new Table().printGrid(Sudoku.finalGrid);
 					superPanel[1].setLayout(new GridLayout(rows, cols));
 					for (int m = 0; m < rows; m++) {
-
 						for (int n = 0; n < cols; n++) {
-
 							JLabel label = new JLabel(String.valueOf(Sudoku.finalGrid[m][n]));
-
 							panelHolder[m][n] = new JPanel();
 							panelHolder[m][n].setSize(10, 10);
 							superPanel[1].add(panelHolder[m][n]);
@@ -180,15 +166,13 @@ public class Gui extends JPanel implements ActionListener {
 						}
 					}
 					new Table().printGrid(Sudoku.finalGrid);
-					System.out.println(elapsedSeconds);
 				}
 			} catch (NullPointerException e2) {
 				System.out.println(e2.getMessage());
 				System.out.println("There was no sudoku to solve");
-				JOptionPane.showMessageDialog(this, "There was no sudoku to solve", "Inane error",
+				JOptionPane.showMessageDialog(this, "There was no sudoku to solve", "No sudoku",
 						JOptionPane.ERROR_MESSAGE);
 			}
-
 		}
 	}
 }

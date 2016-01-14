@@ -9,7 +9,6 @@ public class Window extends JFrame {
 		JFrame window = new JFrame("Sudoku Solver");
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.add(new Gui());
-		window.pack();
 		window.setVisible(true);
 		window.setSize(500, 370);
 		window.setResizable(false);

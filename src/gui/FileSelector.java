@@ -13,21 +13,20 @@ public class FileSelector extends JFrame {
 
 	public FileSelector() {
 		
-		// Programmet leder efter filer der slutter med .ff
-		
 	}
 	public File FileSelect() {
 		JFileChooser fileChooser = new JFileChooser();
+		// The JFileChooser is only showing files with the extension .sudoku
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Sudoku files, .sudoku", "sudoku");
 
 		fileChooser.setFileFilter(filter);
 		int returnVal = fileChooser.showOpenDialog(this);
-		// Hvis der bliver trykket cancel, retunerer programmet ikke noget.
+		// If cancel is pressed, the JFileChooser returns nothing.
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			// Da swing ikke tillader multi-threading, venter fileChooser her
-			// på, at man vælger en fil vha. APPROVE_OPTION.
+			// Since JFileChooser insn't thread safe it waits 
+			// until one chooses a file.
 			chosenFile = fileChooser.getSelectedFile();
-			// til debugging
+			// For debugging
 			System.out.println("You chose to open this file: " + fileChooser.getSelectedFile());
 
 		} else if (returnVal == JFileChooser.CANCEL_OPTION) {
@@ -39,12 +38,12 @@ public class FileSelector extends JFrame {
 	}
 	public File FileSave() {
 		JFileChooser fileChooser = new JFileChooser();
-		// Programmet leder efter filer der slutter med .ff
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Sudoku files, .sudoku", "sudoku");
+		// The JFileChooser is only showing files with the extension .ssudoku
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Sudoku files, .ssudoku", "ssudoku");
 
 		fileChooser.setFileFilter(filter);
 		int returnVal = fileChooser.showSaveDialog(this);
-		// Hvis der bliver trykket cancel, retunerer programmet ikke noget.
+		// If cancel is pressed, the JFileChooser returns nothing.
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			path = fileChooser.getSelectedFile().getAbsoluteFile();
 			path = new File(path+".ssudoku");

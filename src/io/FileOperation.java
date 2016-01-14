@@ -35,11 +35,11 @@ public class FileOperation {
 					row++;
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				System.out.println("Could not read the file properly");
 				e.printStackTrace();
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			System.out.println("The file could not be found");
 			e.printStackTrace();
 		}
 		return table.grid;
@@ -51,8 +51,7 @@ public class FileOperation {
 		try {
 			writer = new FileWriter(fileName);
 			BufferedWriter bw = new BufferedWriter(writer);
-			bw.write("+-------+-------+-------+");
-			bw.newLine();
+			bw.write("+-------+-------+-------+\n");
 			for (int j = 0; j < 9; j++) {
 				for (int i = 0; i < 9; i++) {
 					if (i % 3 == 0) {
@@ -60,19 +59,16 @@ public class FileOperation {
 					}
 					bw.write(grid[j][i] + " ");
 				}
-				bw.write("|");
-				System.out.println();
-				bw.newLine();
+				bw.write("|\n");
 				if (j % 3 == 2) {
-					bw.write("+-------+-------+-------+");
-					bw.newLine();
+					bw.write("+-------+-------+-------+\n");
 				}
 			}
 			bw.flush();
 			bw.close();
 			writer.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Could not write to file");
 			e.printStackTrace();
 		}
 
