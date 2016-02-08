@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class ThreadInit {
 	public static ArrayList<Thread> threads = new ArrayList<Thread>();
 	int i = 0;
-	public ThreadInit(int grid[][], int row, int col) {
+	public ThreadInit(final int grid[][], int row, int col) {
 		Table table = new Table();
 		while (grid[row][col] != 0) {
 			row++;
@@ -23,7 +23,7 @@ public class ThreadInit {
 		ArrayList<Integer> currentNumbers = new Solver().contains(grid, row, col);
 
 		while (i <= 8) {
-			if (currentNumbers.contains(i) == false && Sudoku.isSolved == false) {
+			if (!currentNumbers.contains(i) && !Sudoku.isSolved) {
 				Thread t = new Thread(new Runnable() {
 					public void run() {
 						grid[inputRow][inputCol] = i;

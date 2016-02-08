@@ -107,8 +107,8 @@ public class Gui extends JPanel implements ActionListener {
 					throw new NullPointerException();
 				}
 				new Table().printGrid(Sudoku.inputGrid); // Print the unsolved sudoku in the console/terminal
-				int row = 0;
-				int col = 0;
+				final int row = 0;
+				final int col = 0;
 				Thread t = new Thread(new Runnable() {
 					public void run() {
 						Sudoku.isSolved = false;
@@ -131,7 +131,7 @@ public class Gui extends JPanel implements ActionListener {
 								"Warning", JOptionPane.ERROR_MESSAGE);
 					}
 				}
-				if (Sudoku.solvable == false) {
+				if (!Sudoku.solvable) {
 					JOptionPane.showMessageDialog(this, "The sudoku could not be solved", "Sudoku unsolvable",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
