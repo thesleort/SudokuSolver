@@ -1,5 +1,7 @@
 # Sudoku Solver
+Gui and terminal based sudoku-solver.
 
+----
 This is a simple sudoku solver made for a 1st semester computer science exam.
 For now it is working very well in a single-threaded solver.
 The program contains a gui, but will also output in the terminal if needed.
