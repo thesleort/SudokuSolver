@@ -15,3 +15,5 @@ The program reads simple "sudoku" files. Examples of these are:
 <br>test2.sudoku
 
 ----
+
+Feel free do clone, fork or do whatever you will with this piece of software.
