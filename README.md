@@ -10,7 +10,7 @@ In the future I would like to finish the multi-threaded solver.
 Work on this has started, but there is still some bugs to be fixed before this part is working.
 
 
-It was made solely by Troels Blicher Petersen @ University of Southern Denmark
+Project is administered and created by Troels Blicher Petersen @ University of Southern Denmark
 
 ----
 The program reads simple "sudoku" files. Examples of these are:
